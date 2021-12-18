@@ -153,11 +153,11 @@ while  True:
         port = int(port)
     except:
         print("Port has to be a number!")
-    if port != int or port > 65535: 
+    if  int(port) > 65535: 
         print("Invalid port!")
     else:break 
 sproperties = open("server.properties","w")
-sproperties.write("online-mode="+crack+"\nserver-port="+port)
+sproperties.write("online-mode="+crack+"\nserver-port="+str(port))
 print("Server creation complete start server by opening run.bat!")
 input()
 
