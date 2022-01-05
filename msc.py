@@ -105,7 +105,6 @@ if stype == "1":
         os.remove("server.jar")
         os.rename(djar, "server.jar")
         print('Done donwloading and replacing server jar!')
-startbat = open("run.bat","w")
 print("For vanilla and small plugin servers 2GB is good enough")
 while True:
     ram = input("Type how many GB of ram to allocate: ")
@@ -118,16 +117,40 @@ while True:
     except: 
         print("Please type a number over 0!")
 ram = str(ram)
-startbat.write("java -Xmx"+ram+"G -Xms"+ram+"G -jar server.jar nogui")  
-startbat.write("\nPAUSE")
-startbat.close()
-print("Do you agree to mojang's EULA (https://account.mojang.com/documents/minecraft_eula)")
+while True:
+    print("[1]Windows")
+    print("[2]Linux")
+    print("[3]MacOS")
+    platform = input("Please type the number of your platform! ")
+    if platform == "1" or "2" or "3":
+        break
+if platform == "1":
+    startbat = open("run.bat","w")
+    startbat.write("java -Xmx"+ram+"G -Xms"+ram+"G -jar server.jar nogui")  
+    startbat.write("\nPAUSE")
+    startbat.close()
+    platformscript = "run.bat"
+if platform == "2":
+    startsh = open("run.sh", "w")
+    startsh.write("#!/bin/sh")
+    startsh.write('\ncd "$(dirname "$(readlink -fn "$0")")"')
+    startsh.write("\njava -Xmx"+ram+"G -Xms"+ram+"G -jar server.jar nogui")
+    startsh.close()
+    platformscript = "run.sh"
+if platform == "3":
+    startcommand = open("run.command", "w")
+    startcommand.write("#!/bin/bash")
+    startcommand.write('\ncd "$(dirname "$0")"')
+    startcommand.write("\njava -Xmx"+ram+"G -Xms"+ram+"G -jar server.jar nogui")
+    startcommand.close()
+    platformscript = "run.command"
+print("Do you agree to mojang's EULA (https://account.mojang.com/documents/minecraft_eula)?")
 while True:
     ia = input("[y/n]")
     if ia.lower() == "n":
         print("Can't create server without aggreing to the EULA!")
         os.remove("server.jar")
-        os.remove("run.bat")
+        os.remove(platformscript)
         input()
         exit()
     if ia.lower() == "y":
@@ -158,7 +181,7 @@ while  True:
     else:break 
 sproperties = open("server.properties","w")
 sproperties.write("online-mode="+crack+"\nserver-port="+str(port))
-print("Server creation complete start server by opening run.bat!")
+print("Server creation complete!\nStart server by opening "+platformscript+" !")
 input()
 
 
